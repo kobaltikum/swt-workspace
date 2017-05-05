@@ -1,0 +1,7 @@
+<changelog><commit>
+					<time>1493993534</time>
+					<sha1>faaf65e29be075448e59bc35814d09f9c49853ee</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Adding the .gitignore file to the repository.&quot;</msg>
+				</commit></changelog>
