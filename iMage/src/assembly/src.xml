@@ -8,8 +8,7 @@
 		<format>zip</format>
 	</formats>
 	<fileSets>
-		<fileSet>
-            <useDefaultExcludes>false</useDefaultExcludes>
+		<fileSet>    
 			<includes>
 				<include>pom.xml</include>
 			</includes>

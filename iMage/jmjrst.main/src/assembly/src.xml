@@ -5,26 +5,25 @@
 	<id>src</id>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<formats>
-		<format>zip</format>
+		<format>jar</format>
 	</formats>
 	<fileSets>
 		<fileSet>
-        <useDefaultExcludes>false</useDefaultExcludes>
+		<useDefaultExcludes>false</useDefaultExcludes>
 			<includes>
 				<include>pom.xml</include>
 				<include>checkstyle.launch</include>
 				<include>integration-test.launch</include>
 				<include>LICENSE</include>
+				<include>.gitignore</include>
 			</includes>
 		</fileSet>
 		
 		<fileSet>
-        <useDefaultExcludes>false</useDefaultExcludes>
 			<directory>src</directory>
 		</fileSet>
 
 		<fileSet>
-        <useDefaultExcludes>false</useDefaultExcludes>
 			<directory>target</directory>
 			<includes>
 				<include>changelog.xml</include>
