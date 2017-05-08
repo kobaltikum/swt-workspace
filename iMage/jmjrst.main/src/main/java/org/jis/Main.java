@@ -100,8 +100,7 @@ public class Main extends JFrame {
     GraphicsDevice gd = gs[0];
     GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
-    try
-    {
+    try {
       UIManager.setLookAndFeel(o.getLookAndFeel());
       SwingUtilities.updateComponentTreeUI(this);
     }
