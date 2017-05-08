@@ -141,7 +141,9 @@ public class Main extends JFrame {
     StyleConstants.setForeground(fileAtr, Color.GREEN);
     try
     {
-      jOutputDoc.insertString(jOutputDoc.getLength(), mes.getString("Main.2") + Options.ls, readyAtr);
+      jOutputDoc.insertString(jOutputDoc.getLength(),
+            mes.getString("Main.2") + Options.ls,
+            readyAtr);
       text.setCaretPosition(jOutputDoc.getLength());
     }
     catch (Exception e)
