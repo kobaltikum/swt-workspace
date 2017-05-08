@@ -1,4 +1,46 @@
 <changelog><commit>
+					<time>1494239833</time>
+					<sha1>7155f289e45f9515039804ffdcb4e1a0f394c88a</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Fixed checkstyle error (reduced length of l. 144) in iMage/jmjrst.main/src/main/java/org/jis/Main.java&quot;</msg>
+				</commit><commit>
+					<time>1494239639</time>
+					<sha1>05eaad1ccc6b3f1ece035458698325cc62608dd2</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Fixed checkstyle error (moved curly brace from l. 104 to l. 103) in iMage/jmjrst.main/src/main/java/org/jis/Main.java&quot;</msg>
+				</commit><commit>
+					<time>1494196235</time>
+					<sha1>5db4508ebcb343eb8a0f0ea6529ae4dbacafc328</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Fixed checkstyle error (moved curly brace from l. 98 to l. 97) in iMage/jmjrst.main/src/main/java/org/jis/Main.java&quot;</msg>
+				</commit><commit>
+					<time>1494195890</time>
+					<sha1>a425f30c879fc098258739cbefdf2e4a3ff3f772</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Added checkstyle to project and corrected checkstyle error in iMage/jmjrst.main/src/main/java/org/jjs/Main&quot;</msg>
+				</commit><commit>
+					<time>1494195116</time>
+					<sha1>1428a905e3d1ec1dadbbaf10186b29e409528ce9</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Ignored IMage/target.&quot;</msg>
+				</commit><commit>
+					<time>1494194724</time>
+					<sha1>b08ad0b36cc56795cfbfa925593519995a6bb511</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Corrected the creation of the jar in iMage/jmjrst.main/pom.xml .&quot;</msg>
+				</commit><commit>
+					<time>1494182364</time>
+					<sha1>e32a4b10e96e195c13b310b426556c296c7b224d</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Added .gitignore file, 'LICENSE', checkstyle.launch and integration-test.launch in the src.xml from jmjrst.main.&quot;</msg>
+				</commit><commit>
 					<time>1493999376</time>
 					<sha1>ebb2ede5416e04bbdf00784afcc8c31a7bc54157</sha1>
 					<author>Jakob Draeger</author>
