@@ -67,6 +67,7 @@ import org.jis.options.Options;
  */
 public class Generator {
   public final static double ROTATE_90  = Math.toRadians(90);
+  public final static double ROTATE_180 = Math.toRadians(180);
   public final static double ROTATE_270 = Math.toRadians(270);
 
   private Main               m;
@@ -723,7 +724,7 @@ public class Generator {
 
     AffineTransform transform = new AffineTransform();
 
-    // get width and height of the origianl image
+    // get width and height of the original image
     int width = image.getWidth(null);
     int height = image.getHeight(null);
 
@@ -733,6 +734,12 @@ public class Generator {
       transform.rotate(Generator.ROTATE_90);
       width = image.getHeight(); // swap
       height = image.getWidth();
+    }
+    else if (rotate == Generator.ROTATE_180) {
+      transform.translate(height, 0);
+      transform.rotate(Generator.ROTATE_90);
+      transform.translate(height, 0);
+      transform.rotate(Generator.ROTATE_90);
     }
     else if (rotate == Generator.ROTATE_270)
     {
