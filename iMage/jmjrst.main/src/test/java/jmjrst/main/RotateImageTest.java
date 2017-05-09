@@ -6,6 +6,9 @@ import java.awt.ImageCapabilities;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
@@ -44,10 +47,19 @@ public class RotateImageTest {
     return true;
   }
   
+  private void tearDown(BufferedImage rotatedImage) throws IOException, InterruptedException {
+    Date currentDate = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HHmmss_SSS");
+    File outputImage = new File("target/data_test/rotatedPicture_"
+        + dateFormat.format(currentDate) + ".jpg");
+    ImageIO.write(rotatedImage, "jpg", outputImage);
+  }
+  
   @Test
-  public void rotateImageTest1() {
+  public void rotateImageTest1() throws IOException, InterruptedException {
     this.setUp();
     BufferedImage sameImage = this.generator.rotateImage(image, 0.0);
+    this.tearDown(sameImage);
     assertTrue(this.areImagesEqual(this.image, sameImage));
   }
   
@@ -67,34 +79,36 @@ public class RotateImageTest {
       illegalImage.getWidth();
     } catch (IllegalArgumentException ie) {
       assertTrue(true);
-      
     }
   }
   
   @Test
-  public void rotateImageTest4() {
+  public void rotateImageTest4() throws IOException, InterruptedException {
     this.setUp();
     int height = this.image.getHeight();
     BufferedImage rotated90Image = this.generator.rotateImage(this.image, Math.toRadians(90));
     int width = rotated90Image.getWidth();
+    this.tearDown(rotated90Image);
     assertEquals(height, width);
   }
   
   @Test
-  public void rotateImageTest5() {
+  public void rotateImageTest5() throws IOException, InterruptedException {
     this.setUp();
     int height = this.image.getHeight();
     BufferedImage rotated270Image = this.generator.rotateImage(this.image, Math.toRadians(270));
     int width = rotated270Image.getWidth();
+    this.tearDown(rotated270Image);
     assertEquals(height, width);
   }
   
   @Test
-  public void rotateImageTest6() {
+  public void rotateImageTest6() throws IOException, InterruptedException {
     this.setUp();
     int height = this.image.getHeight();
     BufferedImage rotated180Image = this.generator.rotateImage(this.image, Math.toRadians(180));
     int afterRotationHeight = rotated180Image.getHeight();
+    this.tearDown(rotated180Image);
     assertEquals(height, afterRotationHeight);
   }
 
