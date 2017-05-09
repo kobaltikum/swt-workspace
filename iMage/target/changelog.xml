@@ -1,4 +1,10 @@
 <changelog><commit>
+					<time>1494276642</time>
+					<sha1>3a1ddb5fe6be0d1e242caa31249ba4b9f6497eec</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Fixed file structure to make 2069436-0.0.1-SNAPSHOT.jar runnable.&quot;</msg>
+				</commit><commit>
 					<time>1494239833</time>
 					<sha1>7155f289e45f9515039804ffdcb4e1a0f394c88a</sha1>
 					<author>Jakob Draeger</author>
