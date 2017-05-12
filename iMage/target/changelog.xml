@@ -1,4 +1,28 @@
 <changelog><commit>
+					<time>1494366833</time>
+					<sha1>7076020f1ef0ba009dd3e850c5c0c220a5a2c965</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Added the functionality of testcases saving the image produced by testing process in target.data_test.&quot;</msg>
+				</commit><commit>
+					<time>1494363964</time>
+					<sha1>6519858f618230f2fd00d6aa226ccc12c05c4a33</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot; Added more test cases and added the functionality to rotate an image by 180 degrees in org.jis.generator.Generator#rotateImage.&quot;</msg>
+				</commit><commit>
+					<time>1494356500</time>
+					<sha1>34732b6b97d9f386b211b784669663d8dde4d43b</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Added testcases for org.jis.Generator#rotateImage and a test picture 'picture'.&quot;</msg>
+				</commit><commit>
+					<time>1494332504</time>
+					<sha1>3e829ae03d4d3b44519960bcf983471ccd678a4a</sha1>
+					<author>Jakob Draeger</author>
+					<branches>refs/heads/master</branches>
+					<msg>&quot;Added test class RotateImageTest.&quot;</msg>
+				</commit><commit>
 					<time>1494276642</time>
 					<sha1>3a1ddb5fe6be0d1e242caa31249ba4b9f6497eec</sha1>
 					<author>Jakob Draeger</author>
