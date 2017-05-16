@@ -67,7 +67,6 @@ import org.jis.options.Options;
  */
 public class Generator {
   public final static double ROTATE_90  = Math.toRadians(90);
-  public final static double ROTATE_180 = Math.toRadians(180);
   public final static double ROTATE_270 = Math.toRadians(270);
 
   private Main               m;
@@ -735,22 +734,22 @@ public class Generator {
       width = image.getHeight(); // swap
       height = image.getWidth();
     }
-    else if (rotate == Generator.ROTATE_180) {
-      transform.translate(height, 0);
-      transform.rotate(Generator.ROTATE_90);
-      transform.translate(height, 0);
-      transform.rotate(Generator.ROTATE_90);
-    }
     else if (rotate == Generator.ROTATE_270)
     {
       transform.translate(0, width);
       transform.rotate(Generator.ROTATE_270);
       width = image.getHeight(null); // swap
       height = image.getWidth(null);
+    } 
+    /*
+     * SWT1 Übungsblatt 1 Aufgabe 2 g) 
+     */
+    else if (Math.abs(rotate - Math.toRadians(180)) < 0.0000001d) {
+	  return rotateImage(rotateImage(image, Generator.ROTATE_90), Generator.ROTATE_90);
     }
     else
     {
-      throw new IllegalArgumentException("degree must be a mutiple of 90�!");
+      throw new IllegalArgumentException("degree must be a mutiple of 90°!");
     }
 
     // Return a new Image

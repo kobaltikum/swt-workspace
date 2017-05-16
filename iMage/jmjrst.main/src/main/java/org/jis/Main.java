@@ -13,7 +13,6 @@
  * KIND, either express or implied. See the License for the 
  * specific language governing permissions and limitations under the License.
  */
-
 package org.jis;
 
 import java.awt.BorderLayout;
@@ -94,13 +93,15 @@ public class Main extends JFrame {
     init();
   }
 
-  private void init() {
+  private void init()
+  {
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     GraphicsDevice[] gs = ge.getScreenDevices();
     GraphicsDevice gd = gs[0];
     GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
-    try {
+    try
+    {
       UIManager.setLookAndFeel(o.getLookAndFeel());
       SwingUtilities.updateComponentTreeUI(this);
     }
@@ -141,9 +142,7 @@ public class Main extends JFrame {
     StyleConstants.setForeground(fileAtr, Color.GREEN);
     try
     {
-      jOutputDoc.insertString(jOutputDoc.getLength(),
-            mes.getString("Main.2") + Options.ls,
-            readyAtr);
+      jOutputDoc.insertString(jOutputDoc.getLength(), mes.getString("Main.2") + Options.ls, readyAtr);
       text.setCaretPosition(jOutputDoc.getLength());
     }
     catch (Exception e)

@@ -9,16 +9,15 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-		<useDefaultExcludes>false</useDefaultExcludes>
+			<useDefaultExcludes>false</useDefaultExcludes>
 			<includes>
 				<include>pom.xml</include>
-				<include>checkstyle.launch</include>
-				<include>integration-test.launch</include>
-				<include>LICENSE</include>
 				<include>.gitignore</include>
+				<include>*.launch</include>
+				<include>LICENSE</include>
 			</includes>
 		</fileSet>
-		
+
 		<fileSet>
 			<directory>src</directory>
 		</fileSet>
