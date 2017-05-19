@@ -25,6 +25,7 @@ repo/
 .project
 .settings
 bin/
+.recommenders/
 
 # Mac
 .DS_Store

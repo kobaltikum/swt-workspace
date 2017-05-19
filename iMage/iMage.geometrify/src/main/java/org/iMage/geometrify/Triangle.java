@@ -40,6 +40,12 @@ public class Triangle implements IPrimitive {
     return (c1 > 0 && c2 > 0 && c3 > 0) || (c1 < 0 && c2 < 0 && c3 < 0);
   }
 
+  /**
+   * Helping method to calculate the cross-product between two points (vectors).
+   * @param a Point A.
+   * @param b Point B.
+   * @return The int cross-product.
+   */
   private int getCrossProd(Point a, Point b) {
     return (a.x * b.y) - (a.y * b.x);
   }
