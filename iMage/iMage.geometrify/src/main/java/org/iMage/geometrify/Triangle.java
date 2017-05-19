@@ -27,6 +27,9 @@ public class Triangle implements IPrimitive {
    *          the third vertex
    */
   public Triangle(Point a, Point b, Point c) {
+    assert (!(a.equals(b)));
+    assert (!(b.equals(c)));
+    assert (!(a.equals(c)));
     this.pointA = a;
     this.pointB = b;
     this.pointC = c;
@@ -34,10 +37,11 @@ public class Triangle implements IPrimitive {
 
   @Override
   public boolean isInsidePrimitive(Point p) {
-    int c1 = this.getCrossProd(this.pointA, p);
-    int c2 = this.getCrossProd(this.pointB, p);
-    int c3 = this.getCrossProd(this.pointC, p);
-    return (c1 > 0 && c2 > 0 && c3 > 0) || (c1 < 0 && c2 < 0 && c3 < 0);
+    boolean b1 = this.getCrossProd(p, this.pointA, this.pointB) < 0.0f;
+    boolean b2 = this.getCrossProd(p, this.pointB, this.pointC) < 0.0f;
+    boolean b3 = this.getCrossProd(p, this.pointC, this.pointA) < 0.0f;
+
+    return ((b1 == b2) && (b2 == b3));
   }
 
   /**
@@ -46,8 +50,8 @@ public class Triangle implements IPrimitive {
    * @param b Point B.
    * @return The int cross-product.
    */
-  private int getCrossProd(Point a, Point b) {
-    return (a.x * b.y) - (a.y * b.x);
+  private float getCrossProd(Point a, Point b, Point c) {
+    return (a.x - c.x) * (b.y - c.y) - (b.x - c.x) * (a.y - c.y);
   }
 
   @Override
