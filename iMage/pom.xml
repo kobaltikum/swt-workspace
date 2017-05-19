@@ -20,5 +20,6 @@
 	<modules>
 		<module>jmjrst.main</module>
 		<!-- add new modules here -->
+		<module>iMage.geometrify</module>
 	</modules>
 </project>

@@ -11,26 +11,25 @@ import java.awt.Point;
  */
 public class RandomPointGenerator implements IPointGenerator {
 
-	/**
-	 * Constructs the generator for points within the specified coordinate
-	 * space.
-	 *
-	 * @param width
-	 *            the maximum x coordinate
-	 * @param height
-	 *            the maximum y coordinate
-	 */
-	public RandomPointGenerator(int width, int height) {
-		/*
-		 * YOUR SOLUTION HERE
-		 */
-	}
+  /**
+   * Constructs the generator for points within the specified coordinate space.
+   *
+   * @param width
+   *          the maximum x coordinate
+   * @param height
+   *          the maximum y coordinate
+   */
+  public RandomPointGenerator(int width, int height) {
+    /*
+     * YOUR SOLUTION HERE
+     */
+  }
 
-	@Override
-	public Point nextPoint() {
-		/*
-		 * YOUR SOLUTION HERE
-		 */
-		return null;
-	}
+  @Override
+  public Point nextPoint() {
+    /*
+     * YOUR SOLUTION HERE
+     */
+    return null;
+  }
 }
