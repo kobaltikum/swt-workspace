@@ -1,5 +1,5 @@
 package org.iMage.geometrify;
-
+//TODO commenten
 import java.awt.Point;
 
 /**

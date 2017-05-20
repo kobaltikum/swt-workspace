@@ -1,5 +1,5 @@
 package org.iMage.geometrify;
-
+//TODO commenten
 import java.awt.Color;
 import java.awt.Point;
 
@@ -48,7 +48,7 @@ public class Triangle implements IPrimitive {
    * Helping method to calculate the cross-product between two points (vectors).
    * @param a Point A.
    * @param b Point B.
-   * @return The int cross-product.
+   * @return The float cross-product.
    */
   private float getCrossProd(Point a, Point b, Point c) {
     return (a.x - c.x) * (b.y - c.y) - (b.x - c.x) * (a.y - c.y);
@@ -67,5 +67,25 @@ public class Triangle implements IPrimitive {
   @Override
   public void setColor(Color c) {
     this.color = c;
+  }
+  
+  /**
+   * Creates an Array with all three x coordinates of this triangle to simplify the
+   * creation of a polygon of this triangle.
+   * @return The array containing all x coordinates.
+   */
+  public int[] getXCoords() {
+    int[] xcoords = {this.pointA.x, this.pointB.x, this.pointC.x};
+    return xcoords;
+  }
+  
+  /**
+   * Creates an Array with all three y coordinates of this triangle to simplify the
+   * creation of a polygon of this triangle.
+   * @return The array containing all y coordinates.
+   */
+  public int[] getYCoords() {
+    int[] ycoords = {this.pointA.y, this.pointB.y, this.pointC.y};
+    return ycoords;
   }
 }
