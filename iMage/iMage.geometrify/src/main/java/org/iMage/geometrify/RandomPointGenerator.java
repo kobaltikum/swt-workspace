@@ -29,8 +29,8 @@ public class RandomPointGenerator implements IPointGenerator {
 
   @Override
   public Point nextPoint() {
-    int randomWidth = ((int)(Math.random())) * (this.width - 1);
-    int randomHeight = ((int)(Math.random())) * (this.height - 1);
+    int randomWidth = (int) (Math.random() * (this.width - 1));
+    int randomHeight = (int) (Math.random() * (this.height - 1));
     return new Point(randomWidth, randomHeight);
   }
 }
