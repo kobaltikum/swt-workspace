@@ -81,21 +81,20 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
 
   @Override
   protected Triangle generatePrimitive() {
-    Point a = this.pointGenerator.nextPoint();
-    Point b = this.pointGenerator.nextPoint();
-    Point c = this.pointGenerator.nextPoint();
-    Triangle t = new Triangle(a,b,c);
-    return t;
+    return new Triangle(this.pointGenerator.nextPoint(),
+        this.pointGenerator.nextPoint(),
+        this.pointGenerator.nextPoint());
   }
 
   @Override
   protected int calculateDifference(BufferedImage origin, BufferedImage curr, IPrimitive prim) {
+    BoundingBox boundingBox = prim.getBoundingBox();
     this.addToImage(curr, prim);
     int diff = 0;
     
-    for (int i = 0; i < origin.getHeight(); i++) {
+    for (int i = 0; i < boundingBox.getLowerRightCorner().y; i++) {
       
-      for (int j = 0; j < origin.getWidth(); j++) {
+      for (int j = 0; j < boundingBox.getLowerRightCorner().x; j++) {
         int originRgb = origin.getRGB(j, i);
         int orgA = (originRgb >> 24) & 0xFF; // old alpha value
         int orgR = (originRgb >> 16) & 0xFF; // old red value
@@ -117,11 +116,12 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
 
   @Override
   protected void addToImage(BufferedImage image, IPrimitive prim) {
+    BoundingBox boundingBox = prim.getBoundingBox();
     Color primitiveColor;
     
-    for (int i = 0; i < image.getHeight(); i++) {
+    for (int i = 0; i < boundingBox.getLowerRightCorner().y; i++) {
       
-      for (int j = 0; j < image.getWidth(); j++) {
+      for (int j = 0; j < boundingBox.getLowerRightCorner().x; j++) {
         if (prim.isInsidePrimitive(new Point(j, i))) {
           int imageRgb = image.getRGB(j, i);
           int newAlpha = (((imageRgb >> 24) & 0xFF) + prim.getColor().getAlpha()) / 2;

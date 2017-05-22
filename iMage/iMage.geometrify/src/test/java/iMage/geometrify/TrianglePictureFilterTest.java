@@ -40,7 +40,7 @@ public class TrianglePictureFilterTest {
     RandomPointGenerator r =  new RandomPointGenerator(testImage.getWidth(), testImage.getHeight());
     TrianglePictureFilter t = new TrianglePictureFilter(r);
     File outputfile = new File("src/test/resources/walter.png");
-    ImageIO.write(t.apply(testImage, 500, 40), "png", outputfile);
+    ImageIO.write(t.apply(testImage, 500, 30), "png", outputfile);
     //TODO bounding boxen
   }
 
