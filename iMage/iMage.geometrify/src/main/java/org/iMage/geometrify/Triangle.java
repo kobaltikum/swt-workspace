@@ -67,8 +67,8 @@ public class Triangle implements IPrimitive {
   
   @Override
   public boolean isInsidePrimitive(Point p) {
-    double a = area(this.pointA.getX(), this.pointA.getY(), this.pointB.getX(), this.pointB.getY(), this.pointC.getX(),
-        this.pointC.getY());
+    double a = area(this.pointA.getX() + 1.0, this.pointA.getY() + 1.0, this.pointB.getX() + 1.0, this.pointB.getY() + 1.0, this.pointC.getX() + 1.0,
+        this.pointC.getY() + 1.0);
 
     /* Calculate area of triangle PBC */
     double a1 = area(p.getX(), p.getY(), this.pointB.getX(), this.pointB.getY(), this.pointC.getX(), this.pointC.getY());
