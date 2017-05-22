@@ -17,6 +17,7 @@ public class Triangle implements IPrimitive {
   private Point pointA;
   private Point pointB;
   private Point pointC;
+  private Point boundingBoxLowerRightCorner;
   private Color color;
 
   /**
@@ -67,8 +68,12 @@ public class Triangle implements IPrimitive {
   
   @Override
   public boolean isInsidePrimitive(Point p) {
-    double a = area(this.pointA.getX() + 1.0, this.pointA.getY() + 1.0, this.pointB.getX() + 1.0, this.pointB.getY() + 1.0, this.pointC.getX() + 1.0,
-        this.pointC.getY() + 1.0);
+    double a = area(this.pointA.getX(),
+        this.pointA.getY(),
+        this.pointB.getX(),
+        this.pointB.getY(),
+        this.pointC.getX(),
+        this.pointC.getY());
 
     /* Calculate area of triangle PBC */
     double a1 = area(p.getX(), p.getY(), this.pointB.getX(), this.pointB.getY(), this.pointC.getX(), this.pointC.getY());
@@ -85,6 +90,7 @@ public class Triangle implements IPrimitive {
 
   @Override
   public BoundingBox getBoundingBox() {
+    this.boundingBoxLowerRightCorner = pointC; 
     return new BoundingBox(pointA, pointC);
   }
 
@@ -118,5 +124,9 @@ public class Triangle implements IPrimitive {
   public int[] getYCoords() {
     int[] ycoords = { this.pointA.y, this.pointB.y, this.pointC.y };
     return ycoords;
+  }
+
+  public Point getBBoxCorner() {
+    return this.boundingBoxLowerRightCorner;
   }
 }

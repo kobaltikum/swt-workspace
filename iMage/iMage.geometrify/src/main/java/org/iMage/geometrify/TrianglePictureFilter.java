@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
 
@@ -13,19 +14,25 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
 
   @Override
   protected Color calculateColor(BufferedImage image, IPrimitive primitive) {
+    Triangle triangle = (Triangle) primitive;
+    BoundingBox b = triangle.getBoundingBox();
     ArrayList<Integer> allValues = new ArrayList<Integer>();
     int alpha = 0;
     int red = 0;
     int green = 0;
     int blue = 0;
-    for (int i = 0; i < image.getHeight(); i++) {
-      for (int j = 0; j < image.getWidth(); j++) {
+    int numberOfValues = 1;
+    for (int i = 0; i < triangle.getBBoxCorner().getY(); i++) {
+      
+      for (int j = 0; j < triangle.getBBoxCorner().getX(); j++) {
         if (primitive.isInsidePrimitive(new Point(j, i))) {
           int rgbValue = image.getRGB(j, i);
           allValues.add(rgbValue);
+          numberOfValues++;
         }
       }
     }
+    
     for (int l = 0; l < allValues.size(); l++) { //All values are added separately...
       alpha += (allValues.get(l) >> 24) & 0xFF;
       red += (allValues.get(l) >> 16) & 0xFF;
@@ -33,10 +40,10 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
       blue += (allValues.get(l)) & 0xFF;
     }
 
-    Color averageColor = new Color((red / allValues.size()), //... and the average values
-        (green / allValues.size()),                          //are created.
-        (blue / allValues.size()),
-        (alpha / allValues.size()));
+    Color averageColor = new Color((red / (numberOfValues)), //... and the average values
+        (green / (numberOfValues)),                          //are created.
+        (blue / (numberOfValues)),
+        (alpha / (numberOfValues)));
 
     return averageColor;
   }
@@ -56,14 +63,16 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
         Triangle tempTriangle = new Triangle(new Point(1, 0), // Initialized
             new Point(0, 0), // only for compilation purposes.
             new Point(0, 1));
-        int currMinDiff = 99999;
+        int currMinDiff = 0;
+        boolean first = true;
         
         for (int j = 0; j < numberOfSamples; j++) {
           Triangle triangle = this.generatePrimitive();
           triangle.setColor(this.calculateColor(image, triangle));
-          if (currMinDiff == 99999) { // First triangle on similarity test
-            currMinDiff = this.calculateDifference(image, wipImage, triangle);
+          if (first) { // First triangle on similarity test
+            currMinDiff = this.calculateDifference(image, wipImage, triangle); 
             tempTriangle = triangle;
+            first = false;
           } else {
             if (currMinDiff > this.calculateDifference(image, wipImage, triangle)) {
               currMinDiff = this.calculateDifference(image, wipImage, triangle);
@@ -81,20 +90,25 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
 
   @Override
   protected Triangle generatePrimitive() {
-    return new Triangle(this.pointGenerator.nextPoint(),
-        this.pointGenerator.nextPoint(),
-        this.pointGenerator.nextPoint());
+    Point a = this.pointGenerator.nextPoint();
+    Objects.requireNonNull(a);
+    Point b = this.pointGenerator.nextPoint();
+    Objects.requireNonNull(b);
+    Point c = this.pointGenerator.nextPoint();
+    Objects.requireNonNull(c);
+    Triangle t = new Triangle(a, b, c);
+    Objects.requireNonNull(t);
+    return t;
   }
 
   @Override
   protected int calculateDifference(BufferedImage origin, BufferedImage curr, IPrimitive prim) {
-    BoundingBox boundingBox = prim.getBoundingBox();
+    Triangle t = (Triangle) prim;
     this.addToImage(curr, prim);
     int diff = 0;
-    
-    for (int i = 0; i < boundingBox.getLowerRightCorner().y; i++) {
+    for (int i = 0; i < t.getBBoxCorner().y; i++) {
       
-      for (int j = 0; j < boundingBox.getLowerRightCorner().x; j++) {
+      for (int j = 0; j < t.getBBoxCorner().x; j++) {
         int originRgb = origin.getRGB(j, i);
         /*int orgA = (originRgb >> 24) & 0xFF; // old alpha value
         int orgR = (originRgb >> 16) & 0xFF; // old red value
@@ -109,7 +123,7 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
             + Math.abs(orgR - currR)
             + Math.abs(orgG - currG)
             + Math.abs(orgB - currB); */
-        diff += (originRgb + currRgb) / 2;
+        diff += Math.abs(originRgb - currRgb);
       }
     }
     return diff;
@@ -119,7 +133,6 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
   protected void addToImage(BufferedImage image, IPrimitive prim) {
     BoundingBox boundingBox = prim.getBoundingBox();
     Color primitiveColor;
-    
     for (int i = 0; i < boundingBox.getLowerRightCorner().y; i++) {
       
       for (int j = 0; j < boundingBox.getLowerRightCorner().x; j++) {
