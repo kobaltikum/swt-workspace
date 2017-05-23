@@ -14,17 +14,17 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
 
   @Override
   protected Color calculateColor(BufferedImage image, IPrimitive primitive) {
-    Triangle triangle = (Triangle) primitive;
-    BoundingBox b = triangle.getBoundingBox();
+    BoundingBox b = primitive.getBoundingBox();
     ArrayList<Integer> allValues = new ArrayList<Integer>();
     int alpha = 0;
     int red = 0;
     int green = 0;
     int blue = 0;
     int numberOfValues = 1;
-    for (int i = 0; i < triangle.getBBoxCorner().getY(); i++) {
+    Objects.requireNonNull(b.getLowerRightCorner()); //TODO weg
+    for (int i = b.getUpperLeftCorner().y; i <= b.getLowerRightCorner().y; i++) {
       
-      for (int j = 0; j < triangle.getBBoxCorner().getX(); j++) {
+      for (int j = b.getUpperLeftCorner().x; j <= b.getLowerRightCorner().x; j++) {
         if (primitive.isInsidePrimitive(new Point(j, i))) {
           int rgbValue = image.getRGB(j, i);
           allValues.add(rgbValue);
@@ -104,11 +104,13 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
   @Override
   protected int calculateDifference(BufferedImage origin, BufferedImage curr, IPrimitive prim) {
     Triangle t = (Triangle) prim;
+    BoundingBox b = t.getBoundingBox();
     this.addToImage(curr, prim);
     int diff = 0;
-    for (int i = 0; i < t.getBBoxCorner().y; i++) {
+    Objects.requireNonNull(b.getLowerRightCorner()); //TODO weg
+    for (int i = b.getUpperLeftCorner().y; i <= b.getLowerRightCorner().y; i++) {
       
-      for (int j = 0; j < t.getBBoxCorner().x; j++) {
+      for (int j = b.getUpperLeftCorner().x; j <= b.getLowerRightCorner().x; j++) {
         int originRgb = origin.getRGB(j, i);
         /*int orgA = (originRgb >> 24) & 0xFF; // old alpha value
         int orgR = (originRgb >> 16) & 0xFF; // old red value
@@ -133,9 +135,11 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
   protected void addToImage(BufferedImage image, IPrimitive prim) {
     BoundingBox boundingBox = prim.getBoundingBox();
     Color primitiveColor;
-    for (int i = 0; i < boundingBox.getLowerRightCorner().y; i++) {
+    for (int i = boundingBox.getUpperLeftCorner().y;
+        i <= boundingBox.getLowerRightCorner().y; i++) {
       
-      for (int j = 0; j < boundingBox.getLowerRightCorner().x; j++) {
+      for (int j = boundingBox.getUpperLeftCorner().x;
+          j <= boundingBox.getLowerRightCorner().x; j++) {
         if (prim.isInsidePrimitive(new Point(j, i))) {
           int imageRgb = image.getRGB(j, i);
           int newAlpha = (((imageRgb >> 24) & 0xFF) + prim.getColor().getAlpha()) / 2;

@@ -17,7 +17,6 @@ public class Triangle implements IPrimitive {
   private Point pointA;
   private Point pointB;
   private Point pointC;
-  private Point boundingBoxLowerRightCorner;
   private Color color;
 
   /**
@@ -90,7 +89,6 @@ public class Triangle implements IPrimitive {
 
   @Override
   public BoundingBox getBoundingBox() {
-    this.boundingBoxLowerRightCorner = pointC; 
     return new BoundingBox(pointA, pointC);
   }
 
@@ -126,7 +124,5 @@ public class Triangle implements IPrimitive {
     return ycoords;
   }
 
-  public Point getBBoxCorner() {
-    return this.boundingBoxLowerRightCorner;
-  }
+
 }
