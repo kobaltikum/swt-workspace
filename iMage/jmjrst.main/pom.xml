@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>swt1</groupId>
-		<artifactId>iMage</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<groupId>swt1.ub2.a4</groupId>
+		<artifactId>2069436</artifactId>
 	</parent>
-	<artifactId>2069436</artifactId>
+	<artifactId>iMage</artifactId>
 
 	<dependencies>
 		<dependency>
@@ -43,4 +43,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	<groupId>swt1jmjrst</groupId>
 </project>

@@ -112,20 +112,20 @@ public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
       
       for (int j = b.getUpperLeftCorner().x; j <= b.getLowerRightCorner().x; j++) {
         int originRgb = origin.getRGB(j, i);
-        /*int orgA = (originRgb >> 24) & 0xFF; // old alpha value
+        int orgA = (originRgb >> 24) & 0xFF; // old alpha value
         int orgR = (originRgb >> 16) & 0xFF; // old red value
         int orgG = (originRgb >> 8) & 0xFF; // old green value
-        int orgB = (originRgb) & 0xFF; // old blue value */
+        int orgB = (originRgb) & 0xFF; // old blue value 
         int currRgb = curr.getRGB(j, i);
-        /*int currA = (currRgb >> 24) & 0xFF; // current alpha value
+        int currA = (currRgb >> 24) & 0xFF; // current alpha value
         int currR = (currRgb >> 16) & 0xFF; // current red value
         int currG = (currRgb >> 8) & 0xFF; // current green value
-        int currB = (currRgb) & 0xFF; // current blue value */
-        /*diff += Math.abs(orgA - currA)
+        int currB = (currRgb) & 0xFF; // current blue value 
+        diff += Math.abs(orgA - currA)
             + Math.abs(orgR - currR)
             + Math.abs(orgG - currG)
-            + Math.abs(orgB - currB); */
-        diff += Math.abs(originRgb - currRgb);
+            + Math.abs(orgB - currB); 
+        /*diff += Math.abs(originRgb - currRgb);*/
       }
     }
     return diff;

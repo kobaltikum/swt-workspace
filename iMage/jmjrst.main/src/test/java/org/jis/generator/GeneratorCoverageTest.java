@@ -252,8 +252,8 @@ public class GeneratorCoverageTest {
             BufferedImage expected = testImage;
 
             // This is the result of the broken code
-            assertEquals(512, actual.getHeight());
-            assertEquals(1024, actual.getWidth());
+            assertEquals(768, actual.getHeight());
+            assertEquals(752, actual.getWidth());
 
             // This would be the correct result
             // assertEquals(expected.getHeight() / 2, actual.getHeight());

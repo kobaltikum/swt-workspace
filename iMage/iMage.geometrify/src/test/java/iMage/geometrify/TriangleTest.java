@@ -15,11 +15,11 @@ import org.junit.Test;
 public class TriangleTest {
 
   private Triangle testTriangle;
-  private final Point pointA = new Point(0, 0);
-  private final Point pointB = new Point(9, 0);
-  private final Point pointC = new Point(0, 9);
-  private final Color color1 = new Color(84, 157, 232);
-  private final Color color2 = new Color(101, 232, 84);
+  private Point pointA;
+  private Point pointB;
+  private Point pointC;
+  private Color color1 = new Color(84, 157, 232);
+  private Color color2 = new Color(101, 232, 84);
 
   /**
    * Sets up the test class.
@@ -36,6 +36,9 @@ public class TriangleTest {
     } catch (AssertionError e) {
       assertTrue(true);
     }
+    this.pointA  = new Point(0, 0);
+    this.pointB  = new Point(9, 0);
+    this.pointC  = new Point(0, 9);
     this.testTriangle = new Triangle(pointA, pointB, pointC);
   }
 
