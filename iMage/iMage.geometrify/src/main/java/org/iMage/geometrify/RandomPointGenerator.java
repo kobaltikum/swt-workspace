@@ -1,5 +1,4 @@
 package org.iMage.geometrify;
-//TODO commenten
 
 import java.awt.Point;
 
@@ -31,7 +30,7 @@ public class RandomPointGenerator implements IPointGenerator {
   @Override
   public Point nextPoint() {
     Point p = new Point();
-    double randomWidth = Math.random() * (this.width - 1);
+    double randomWidth = Math.random() * (this.width - 1); 
     double randomHeight = Math.random() * (this.height - 1);
     p.setLocation(randomWidth, randomHeight);
     return p;

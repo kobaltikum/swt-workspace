@@ -1,10 +1,8 @@
 package org.iMage.geometrify;
 
-//TODO commenten
 import java.awt.Color;
 import java.awt.Point;
 
-import javax.management.modelmbean.RequiredModelMBean;
 
 /**
  * A triangle.
@@ -38,29 +36,6 @@ public class Triangle implements IPrimitive {
   }
 
   
-  /**
-   * public boolean isInsidePrimitive(Point p) { boolean b1 =
-   * this.getCrossProd(p, this.pointA, this.pointB) < 0.0f; boolean b2 =
-   * this.getCrossProd(p, this.pointB, this.pointC) < 0.0f; boolean b3 =
-   * this.getCrossProd(p, this.pointC, this.pointA) < 0.0f;
-   * 
-   * return ((b1 == b2) && (b2 == b3)); }
-   * 
-   * /** Helping method to calculate the cross-product between three points
-   * (vectors).
-   * 
-   * @param a
-   *          Point A.
-   * @param b
-   *          Point B.
-   * @param c
-   *          Point C.
-   * @return The float cross-product.
-   *
-   *         private float getCrossProd(Point a, Point b, Point c) { return (a.x
-   *         - c.x) * (b.y - c.y) - (b.x - c.x) * (a.y - c.y); }
-   */
-
   private double area(double x1, double y1, double x2, double y2, double x3, double y3) {
     return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
   }
@@ -75,13 +50,19 @@ public class Triangle implements IPrimitive {
         this.pointC.getY());
 
     /* Calculate area of triangle PBC */
-    double a1 = area(p.getX(), p.getY(), this.pointB.getX(), this.pointB.getY(), this.pointC.getX(), this.pointC.getY());
+    double a1 = area(p.getX(), p.getY(),
+        this.pointB.getX(), this.pointB.getY(),
+        this.pointC.getX(), this.pointC.getY());
 
     /* Calculate area of triangle PAC */
-    double a2 = area(this.pointA.getX(), this.pointA.getY(), p.getX(), p.getY(), this.pointC.getX(), this.pointC.getY());
+    double a2 = area(this.pointA.getX(), this.pointA.getY(),
+        p.getX(), p.getY(),
+        this.pointC.getX(), this.pointC.getY());
 
     /* Calculate area of triangle PAB */
-    double a3 = area(this.pointA.getX(), this.pointA.getY(), this.pointB.getX(), this.pointB.getY(), p.getX(), p.getY());
+    double a3 = area(this.pointA.getX(), this.pointA.getY(),
+        this.pointB.getX(), this.pointB.getY(),
+        p.getX(), p.getY());
 
     /* Check if sum of A1, A2 and A3 is same as A */
     return (a == a1 + a2 + a3);

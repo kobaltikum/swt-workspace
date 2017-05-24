@@ -3,10 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<version>0.0.1-SNAPSHOT</version>
-		<groupId>swt1.ub2.a4</groupId>
-		<artifactId>2069436</artifactId>
+		<groupId>swt1</groupId>
+		<artifactId>iMage</artifactId>
 	</parent>
-	<artifactId>iMage</artifactId>
+	<artifactId>2069436</artifactId>
 
 	<dependencies>
 		<dependency>
@@ -43,5 +43,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<groupId>swt1jmjrst</groupId>
+	<groupId>swt1.ub2.a4jmj</groupId>
 </project>
