@@ -3,107 +3,81 @@ package org.iMage.geometrify;
 import java.awt.Color;
 import java.awt.Point;
 
-
 /**
  * A triangle.
  *
- * @author Jakob Dräger
+ * @author Dominic Ziegler, Martin Blersch
  * @version 1.0
  */
 public class Triangle implements IPrimitive {
+	private BoundingBox boundingBox;
+	private Color color;
+	//	Alternative Implementierung:
+	//	private Polygon polygon;
+	protected Point a, b, c;
 
-  private Point pointA;
-  private Point pointB;
-  private Point pointC;
-  private Color color;
+	/**
+	 * Creates a new triangle from the given vertices.
+	 *
+	 * @param a
+	 *            the first vertex
+	 * @param b
+	 *            the second vertex
+	 * @param c
+	 *            the third vertex
+	 */
+	public Triangle(Point a, Point b, Point c) {
+		Point upperLeft = new Point(Math.min(Math.min(a.x, b.x), c.x), Math.min(Math.min(a.y, b.y), c.y));
+		Point lowerRight = new Point(Math.max(Math.max(a.x, b.x), c.x), Math.max(Math.max(a.y, b.y), c.y));
 
-  /**
-   * Creates a new triangle from the given vertices.
-   *
-   * @param a
-   *          the first vertex
-   * @param b
-   *          the second vertex
-   * @param c
-   *          the third vertex
-   */
-  public Triangle(Point a, Point b, Point c) {
-    if ((!(a.equals(b))) && (!(b.equals(c))) && (!(a.equals(c)))) {
-      this.pointA = a;
-      this.pointB = b;
-      this.pointC = c;
-    }
-  }
+		boundingBox = new BoundingBox(upperLeft, lowerRight);
+		//		Alternative Implementierung:
+		//		polygon = new Polygon();
+		//		polygon.addPoint(a.x, a.y);
+		//		polygon.addPoint(b.x, b.y);
+		//		polygon.addPoint(c.x, c.y);
+		this.a = a;
+		this.b = b;
+		this.c = c;
+	}
 
-  
-  private double area(double x1, double y1, double x2, double y2, double x3, double y3) {
-    return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
-  }
-  
-  @Override
-  public boolean isInsidePrimitive(Point p) {
-    double a = area(this.pointA.getX(),
-        this.pointA.getY(),
-        this.pointB.getX(),
-        this.pointB.getY(),
-        this.pointC.getX(),
-        this.pointC.getY());
+	private static long crossProduct(Point point, Point trianglePointA, Point trianglePointB) {
+		int ax = point.x - trianglePointA.x;
+		int ay = point.y - trianglePointA.y;
+		int bx = trianglePointA.x - trianglePointB.x;
+		int by = trianglePointA.y - trianglePointB.y;
+		return ax * by - ay * bx;
+	}
 
-    /* Calculate area of triangle PBC */
-    double a1 = area(p.getX(), p.getY(),
-        this.pointB.getX(), this.pointB.getY(),
-        this.pointC.getX(), this.pointC.getY());
+	@Override
+	public boolean isInsidePrimitive(Point point) {
+		boolean b1, b2, b3;
 
-    /* Calculate area of triangle PAC */
-    double a2 = area(this.pointA.getX(), this.pointA.getY(),
-        p.getX(), p.getY(),
-        this.pointC.getX(), this.pointC.getY());
+		b1 = crossProduct(point, a, b) > 0;
+		b2 = crossProduct(point, b, c) > 0;
+		b3 = crossProduct(point, c, a) > 0;
+		return (b1 == b2) && (b2 == b3);
+	}
 
-    /* Calculate area of triangle PAB */
-    double a3 = area(this.pointA.getX(), this.pointA.getY(),
-        this.pointB.getX(), this.pointB.getY(),
-        p.getX(), p.getY());
+	//	Alternative Implementierung:
+	//
+	//	@Override
+	//	public boolean isInsidePrimitive(Point point) {
+	//		return polygon.contains(point.x, point.y);
+	//	}
 
-    /* Check if sum of A1, A2 and A3 is same as A */
-    return (a == a1 + a2 + a3);
-  }
+	@Override
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
 
-  @Override
-  public BoundingBox getBoundingBox() {
-    return new BoundingBox(pointA, pointC);
-  }
+	@Override
+	public Color getColor() {
+		return color;
+	}
 
-  @Override
-  public Color getColor() {
-    return this.color;
-  }
-
-  @Override
-  public void setColor(Color c) {
-    this.color = c;
-  }
-
-  /**
-   * Creates an Array with all three x coordinates of this triangle to simplify
-   * the creation of a polygon of this triangle.
-   * 
-   * @return The array containing all x coordinates.
-   */
-  public int[] getXCoords() {
-    int[] xcoords = { this.pointA.x, this.pointB.x, this.pointC.x };
-    return xcoords;
-  }
-
-  /**
-   * Creates an Array with all three y coordinates of this triangle to simplify
-   * the creation of a polygon of this triangle.
-   * 
-   * @return The array containing all y coordinates.
-   */
-  public int[] getYCoords() {
-    int[] ycoords = { this.pointA.y, this.pointB.y, this.pointC.y };
-    return ycoords;
-  }
-
-
+	@Override
+	public void setColor(Color c) {
+		color = c;
+	}
 }

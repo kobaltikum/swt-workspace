@@ -2,17 +2,19 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>swt1</groupId>
-    <version>0.0.1-SNAPSHOT</version>
     <artifactId>iMage</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>swt1.ub2.a4geo</groupId>
-  <artifactId>2069436</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <artifactId>iMage.geometrify</artifactId>
   <dependencies>
   	<dependency>
   		<groupId>swt1</groupId>
   		<artifactId>iMage.geometrify-base</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
   	</dependency>
   </dependencies>
 </project>

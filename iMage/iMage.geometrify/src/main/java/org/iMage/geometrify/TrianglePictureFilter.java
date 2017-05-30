@@ -3,145 +3,261 @@ package org.iMage.geometrify;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
+/**
+ * The {@link TrianglePictureFilter} is a {@link IPrimitiveFilter} which is able
+ * to reconstruct an image through {@link Triangle}s.
+ *
+ * @author Tobias Hey
+ *
+ */
 public class TrianglePictureFilter extends AbstractPrimitivePictureFilter {
 
-  public TrianglePictureFilter(IPointGenerator pointGenerator) {
-    super(pointGenerator);
-  }
+	private static final int HEX_FF = 0xff;
 
-  @Override
-  protected Color calculateColor(BufferedImage image, IPrimitive primitive) {
-    BoundingBox b = primitive.getBoundingBox();
-    ArrayList<Integer> allValues = new ArrayList<Integer>();
-    int alpha = 0;
-    int red = 0;
-    int green = 0;
-    int blue = 0;
-    int numberOfValues = 1;
-    for (int i = b.getUpperLeftCorner().y; i <= b.getLowerRightCorner().y; i++) {
-      
-      for (int j = b.getUpperLeftCorner().x; j <= b.getLowerRightCorner().x; j++) {
-        if (primitive.isInsidePrimitive(new Point(j, i))) {
-          int rgbValue = image.getRGB(j, i);
-          allValues.add(rgbValue); //All rgb values are collected from inside the primitive
-          numberOfValues++;
-        }
-      }
-    }
-    
-    for (int l = 0; l < allValues.size(); l++) { //All values are added separately...
-      alpha += (allValues.get(l) >> 24) & 0xFF;
-      red += (allValues.get(l) >> 16) & 0xFF;
-      green += (allValues.get(l) >> 8) & 0xFF;
-      blue += (allValues.get(l)) & 0xFF;
-    }
+	/**
+	 * Constructs a {@link TrianglePictureFilter} with an specified
+	 * {@link IPointGenerator}.
+	 *
+	 * @param pointGenerator
+	 *            The {@link IPointGenerator} to use for generating
+	 *            {@link Triangle} {@link Point}s
+	 */
+	public TrianglePictureFilter(IPointGenerator pointGenerator) {
+		super(pointGenerator);
+	}
 
-    Color averageColor = new Color((red / (numberOfValues)), //... and the average values
-        (green / (numberOfValues)),                          //are created.
-        (blue / (numberOfValues)),
-        (alpha / (numberOfValues)));
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.iMage.geometrify.AbstractPrimitivePictureFilter#calculateColor(java.
+	 * awt.image.BufferedImage, org.iMage.geometrify.IPrimitive)
+	 */
+	@Override
+	protected Color calculateColor(BufferedImage original, IPrimitive primitive) {
+		int bandwidth = (original.getColorModel().hasAlpha()) ? 4 : 3;
 
-    return averageColor;
-  }
+		int width = original.getWidth();
+		int height = original.getHeight();
 
-  @Override
-  public BufferedImage apply(BufferedImage image, int numberOfIterations, int numberOfSamples) {
-    
-    if ((numberOfIterations == 0) || (numberOfSamples == 0)) { 
-      return image;
-      
-    } else {
-      BufferedImage wipImage = new BufferedImage(image.getWidth(),
-          image.getHeight(),
-          image.getType());
+		Point start = primitive.getBoundingBox().getUpperLeftCorner();
+		Point end = primitive.getBoundingBox().getLowerRightCorner();
 
-      for (int i = 0; i < numberOfIterations; i++) {
-        Triangle tempTriangle = new Triangle(new Point(1, 0), // Initialized
-            new Point(0, 0), // only for compilation purposes.
-            new Point(0, 1));
-        int currMinDiff = 0;
-        boolean first = true;
-        
-        for (int j = 0; j < numberOfSamples; j++) {
-          Triangle triangle = this.generatePrimitive();
-          triangle.setColor(this.calculateColor(image, triangle));
-          if (first) { // First triangle on similarity test
-            currMinDiff = this.calculateDifference(image, wipImage, triangle); 
-            tempTriangle = triangle;
-            first = false;
-          } else {
-            if (currMinDiff > this.calculateDifference(image, wipImage, triangle)) {
-              currMinDiff = this.calculateDifference(image, wipImage, triangle);
-              tempTriangle = triangle;
-            }
-          }
-        }
-        this.addToImage(wipImage, tempTriangle);
-        
-      }
-      
-      return wipImage;
-    }
-  }
+		int numPixels = 0;
 
-  @Override
-  protected Triangle generatePrimitive() {
-    Point a = this.pointGenerator.nextPoint();
-    Point b = this.pointGenerator.nextPoint();
-    Point c = this.pointGenerator.nextPoint();
-    Triangle t = new Triangle(a, b, c);
-    return t;
-  }
+		int red = 0;
+		int green = 0;
+		int blue = 0;
+		int alpha = 0;
 
-  @Override
-  protected int calculateDifference(BufferedImage origin, BufferedImage curr, IPrimitive prim) {
-    Triangle t = (Triangle) prim;
-    BoundingBox b = t.getBoundingBox();
-    this.addToImage(curr, prim); //primitive is temporarily added to the 
-    int diff = 0;                //image the same way it would be added in this#apply
-    for (int i = b.getUpperLeftCorner().y; i <= b.getLowerRightCorner().y; i++) {
-      
-      for (int j = b.getUpperLeftCorner().x; j <= b.getLowerRightCorner().x; j++) {
-        int originRgb = origin.getRGB(j, i);
-        int orgA = (originRgb >> 24) & 0xFF; // old alpha value
-        int orgR = (originRgb >> 16) & 0xFF; // old red value
-        int orgG = (originRgb >> 8) & 0xFF; // old green value
-        int orgB = (originRgb) & 0xFF; // old blue value 
-        int currRgb = curr.getRGB(j, i);
-        int currA = (currRgb >> 24) & 0xFF; // current alpha value
-        int currR = (currRgb >> 16) & 0xFF; // current red value
-        int currG = (currRgb >> 8) & 0xFF; // current green value
-        int currB = (currRgb) & 0xFF; // current blue value 
-        diff += Math.abs(orgA - currA)
-            + Math.abs(orgR - currR)
-            + Math.abs(orgG - currG)
-            + Math.abs(orgB - currB); 
-      }
-    }
-    return diff;
-  }
+		int wStart = Math.max(0, start.x);
+		int wEnd = Math.min(width - 1, end.x);
+		int hStart = Math.max(0, start.y);
+		int hEnd = Math.min(height - 1, end.y);
+		int[] imgPixels = new int[width * height * bandwidth];
 
-  @Override
-  protected void addToImage(BufferedImage image, IPrimitive prim) {
-    BoundingBox boundingBox = prim.getBoundingBox();
-    Color primitiveColor;
-    for (int i = boundingBox.getUpperLeftCorner().y;
-        i <= boundingBox.getLowerRightCorner().y; i++) {
-      
-      for (int j = boundingBox.getUpperLeftCorner().x;
-          j <= boundingBox.getLowerRightCorner().x; j++) {
-        if (prim.isInsidePrimitive(new Point(j, i))) {
-          int imageRgb = image.getRGB(j, i);
-          int newAlpha = (((imageRgb >> 24) & 0xFF) + prim.getColor().getAlpha()) / 2; //average
-          int newRed = (((imageRgb >> 16) & 0xFF) + prim.getColor().getRed()) / 2;   //color values
-          int newGreen = (((imageRgb >> 8) & 0xFF) + prim.getColor().getGreen()) / 2; //are 
-          int newBlue = (((imageRgb) & 0xFF) + prim.getColor().getBlue()) / 2;        //calculated
-          primitiveColor = new Color(newRed, newGreen, newBlue, newAlpha);
-          image.setRGB(j, i, primitiveColor.getRGB()); //The average color is painted on the image.
-        }
-      }
-    }
-  }
+		original.getRaster().getPixels(0, 0, width, height, imgPixels);
+
+		Point currPixel = new Point();
+
+		for (int y = hStart; y <= hEnd; y++) {
+			for (int x = wStart; x <= wEnd; x++) {
+				currPixel.setLocation(x, y);
+				if (primitive.isInsidePrimitive(currPixel)) {
+					int pixelIndex = (y * width + x) * bandwidth;
+					numPixels++;
+
+					if (bandwidth == 4) {
+						alpha += imgPixels[pixelIndex + 3];
+
+					}
+					red += imgPixels[pixelIndex + 2];
+					green += imgPixels[pixelIndex + 1];
+					blue += imgPixels[pixelIndex];
+
+				}
+			}
+		}
+
+		// normalize color values
+		if (numPixels > 0) {
+			alpha = alpha / numPixels;
+			red = red / numPixels;
+			green = green / numPixels;
+			blue = blue / numPixels;
+		}
+		if (original.getColorModel().hasAlpha()) {
+			return new Color(red, green, blue, alpha);
+		} else {
+			return new Color(red, green, blue);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.iMage.geometrify.AbstractPrimitivePictureFilter#apply(java.awt.image.
+	 * BufferedImage, int, int)
+	 */
+	@Override
+	public BufferedImage apply(BufferedImage image, int numberOfIterations, int numberOfSamples) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+
+		// construct "empty" image
+		BufferedImage result = new BufferedImage(width, height, image.getType());
+
+		for (int i = 0; i < numberOfIterations; i++) {
+			int bestDifference = Integer.MAX_VALUE;
+			IPrimitive bestPrimitive = null;
+
+			for (int s = 0; s < numberOfSamples; s++) {
+				IPrimitive sample = generatePrimitive();
+				sample.setColor(calculateColor(image, sample));
+				int difference = calculateDifference(image, result, sample);
+
+				if (difference <= bestDifference) {
+					bestDifference = difference;
+					bestPrimitive = sample;
+				}
+			}
+
+			addToImage(result, bestPrimitive);
+		}
+
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.iMage.geometrify.AbstractPrimitivePictureFilter#generatePrimitive()
+	 */
+	@Override
+	protected IPrimitive generatePrimitive() {
+		return new Triangle(pointGenerator.nextPoint(), pointGenerator.nextPoint(), pointGenerator.nextPoint());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.iMage.geometrify.AbstractPrimitivePictureFilter#calculateDifference(
+	 * java.awt.image.BufferedImage, java.awt.image.BufferedImage,
+	 * org.iMage.geometrify.IPrimitive)
+	 */
+	@Override
+	protected int calculateDifference(BufferedImage original, BufferedImage current, IPrimitive primitive) {
+		assert (primitive.getColor() != null) : "Average color of primitive has not been calculated, yet";
+
+		int bandwidth = (original.getColorModel().hasAlpha()) ? 4 : 3;
+
+		int width = original.getWidth();
+		int height = original.getHeight();
+
+		int[] orgPixels = new int[width * height * bandwidth];
+		int[] currPixels = new int[width * height * bandwidth];
+
+		current.getRaster().getPixels(0, 0, width, height, currPixels);
+		original.getRaster().getPixels(0, 0, width, height, orgPixels);
+
+		Point currPixel = new Point();
+
+		int difference = 0;
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				int pixelIndex = (y * width + x) * bandwidth;
+				currPixel.setLocation(x, y);
+
+				// inside Primitive use calculated avg between current and
+				// primitive color as value to calculate difference with
+				if (primitive.isInsidePrimitive(currPixel)) {
+
+					int argb = primitive.getColor().getRGB();
+
+					int red = (argb >> 16) & HEX_FF;
+					int green = (argb >> 8) & HEX_FF;
+					int blue = argb & HEX_FF;
+
+					difference += Math.abs(orgPixels[pixelIndex] - ((currPixels[pixelIndex] + blue) / 2));
+					difference += Math.abs(orgPixels[pixelIndex + 1] - ((currPixels[pixelIndex + 1] + green) / 2));
+					difference += Math.abs(orgPixels[pixelIndex + 2] - ((currPixels[pixelIndex + 2] + red) / 2));
+
+					if (bandwidth == 4) {
+						int alpha = (argb >> 24) & HEX_FF;
+						difference += Math.abs(orgPixels[pixelIndex + 3] - ((currPixels[pixelIndex + 3] + alpha) / 2));
+					}
+				} else {
+					for (int n = 0; n < bandwidth; n++) {
+						difference += Math.abs(orgPixels[pixelIndex + n] - currPixels[pixelIndex + n]);
+					}
+				}
+
+				if (difference < 0) {
+					return Integer.MAX_VALUE;
+				}
+			}
+		}
+
+		return difference;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.iMage.geometrify.AbstractPrimitivePictureFilter#addToImage(java.awt.
+	 * image.BufferedImage, org.iMage.geometrify.IPrimitive)
+	 */
+	@Override
+	protected void addToImage(BufferedImage current, IPrimitive primitive) {
+		assert (primitive.getColor() != null) : "Average color of primitive has not been calculated, yet";
+
+		int bandwidth = (current.getColorModel().hasAlpha()) ? 4 : 3;
+
+		int width = current.getWidth();
+		int height = current.getHeight();
+
+		Point start = primitive.getBoundingBox().getUpperLeftCorner();
+		Point end = primitive.getBoundingBox().getLowerRightCorner();
+
+		int wStart = Math.max(0, start.x);
+		int wEnd = Math.min(width - 1, end.x);
+		int hStart = Math.max(0, start.y);
+		int hEnd = Math.min(height - 1, end.y);
+
+		int[] imgPixels = new int[width * height * bandwidth];
+
+		current.getRaster().getPixels(0, 0, width, height, imgPixels);
+
+		Point currPixel = new Point();
+
+		for (int y = hStart; y <= hEnd; y++) {
+			for (int x = wStart; x <= wEnd; x++) {
+				currPixel.setLocation(x, y);
+				if (primitive.isInsidePrimitive(currPixel)) {
+					int pixelIndex = (y * width + x) * bandwidth;
+
+					int argb = primitive.getColor().getRGB();
+
+					int red = (argb >> 16) & HEX_FF;
+					int green = (argb >> 8) & HEX_FF;
+					int blue = argb & HEX_FF;
+
+					imgPixels[pixelIndex] = Math.max(0, Math.min(255, ((blue + imgPixels[pixelIndex]) / 2)));
+					imgPixels[pixelIndex + 1] = Math.max(0, Math.min(255, ((green + imgPixels[pixelIndex + 1]) / 2)));
+					imgPixels[pixelIndex + 2] = Math.max(0, Math.min(255, ((red + imgPixels[pixelIndex + 2]) / 2)));
+
+					if (bandwidth == 4) {
+						int alpha = (argb >> 24) & HEX_FF;
+						imgPixels[pixelIndex + 3] = Math.max(0, Math.min(255, ((alpha + imgPixels[pixelIndex + 3]) / 2)));
+					}
+				}
+			}
+		}
+		current.getRaster().setPixels(0, 0, width, height, imgPixels);
+	}
 }

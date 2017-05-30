@@ -1,38 +1,35 @@
 package org.iMage.geometrify;
 
 import java.awt.Point;
+import java.util.Random;
+
+import org.iMage.geometrify.IPointGenerator;
 
 /**
- * Provides an infinite source of points at random coordinates within a given
- * range.
- *
+ * Provides an infinite source of points at random coordinates within a given range.
+ * 
  * @author Dominic Ziegler
  * @version 1.0
  */
 public class RandomPointGenerator implements IPointGenerator {
-  
-  private int width;
-  private int height;
-  
-  /**
-   * Constructs the generator for points within the specified coordinate space.
-   *
-   * @param width
-   *          the maximum x coordinate
-   * @param height
-   *          the maximum y coordinate
-   */
-  public RandomPointGenerator(int width, int height) {
-    this.width = width;
-    this.height = height;
-  }
+	private int width;
+	private int height;
+	
+	private Random rand = new Random();
+	
+	/**
+	 * Constructs the generator for points within the specified coordinate space.
+	 * 
+	 * @param width  the maximum x coordinate
+	 * @param height the maximum y coordinate
+	 */
+	public RandomPointGenerator(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
 
-  @Override
-  public Point nextPoint() {
-    Point p = new Point();
-    double randomWidth = Math.random() * (this.width - 1); 
-    double randomHeight = Math.random() * (this.height - 1);
-    p.setLocation(randomWidth, randomHeight);
-    return p;
-  }
+	@Override
+	public Point nextPoint() {
+		return new Point(rand.nextInt(width), rand.nextInt(height));
+	}
 }
