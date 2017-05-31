@@ -82,7 +82,36 @@ public abstract class JmjrstPlugin implements Comparable<JmjrstPlugin> {
 	 */
 	@Override
 	public int compareTo(JmjrstPlugin otherPlugin) {
-		// TODO: implement me
-		return 0;
+	  switch(this.getPriority()) {
+    case HIGH:
+      if (otherPlugin.getPriority() == PluginPriority.HIGH) {
+        return 0;
+      } else { //includes cases MID, LOW and null for other plugin
+        return 1;
+      }
+    case LOW:
+      if (otherPlugin.getPriority() == PluginPriority.LOW) {
+        return 0;
+      } else if (otherPlugin.getPriority() == null) {
+        return 1;
+      } else { //includes cases MID and HIGH for other plugin
+        return -1;
+      }
+    case MID:
+      switch(otherPlugin.getPriority()) {
+      case HIGH:
+        return -1;
+      case MID:
+        return 0;
+      default:  //includes cases LOW and null for other plugin
+        return 1;
+      }
+    default:
+      if (otherPlugin.getPriority() == null) {
+        return 0;
+      } else {
+        return -1;
+      }
+	  }
 	}
 }

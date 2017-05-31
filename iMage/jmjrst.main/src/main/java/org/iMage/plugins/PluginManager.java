@@ -2,6 +2,7 @@ package org.iMage.plugins;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -26,7 +27,14 @@ public final class PluginManager {
 	 *         ascending order.
 	 */
 	public static List<JmjrstPlugin> getPlugins() {
-		// TODO: implement me
-		return new ArrayList<JmjrstPlugin>();
+	  ServiceLoader<JmjrstPlugin> servLoader = ServiceLoader.load(JmjrstPlugin.class);
+	  List<JmjrstPlugin> pluginList = new ArrayList<JmjrstPlugin>();
+	  Iterator<JmjrstPlugin> it = servLoader.iterator();
+	  while (it.hasNext()) {
+	    JmjrstPlugin p = it.next();
+	    pluginList.add(p);
+	  }
+	  Collections.sort(pluginList);
+	  return pluginList;
 	}
 }
