@@ -17,4 +17,5 @@
   		<artifactId>junit</artifactId>
   	</dependency>
   </dependencies>
+  <groupId>swt1.ub2.a4</groupId>
 </project>

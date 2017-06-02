@@ -29,9 +29,9 @@ public final class PluginManager {
 	public static List<JmjrstPlugin> getPlugins() {
 	  ServiceLoader<JmjrstPlugin> servLoader = ServiceLoader.load(JmjrstPlugin.class);
 	  List<JmjrstPlugin> pluginList = new ArrayList<JmjrstPlugin>();
-	  Iterator<JmjrstPlugin> it = servLoader.iterator();
-	  while (it.hasNext()) {
-	    JmjrstPlugin p = it.next();
+	  Iterator<JmjrstPlugin> pluginIterator = servLoader.iterator();
+	  while (pluginIterator.hasNext()) {
+	    final JmjrstPlugin p = pluginIterator.next();
 	    pluginList.add(p);
 	  }
 	  Collections.sort(pluginList);

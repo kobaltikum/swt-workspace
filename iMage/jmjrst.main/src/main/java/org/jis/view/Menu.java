@@ -15,13 +15,20 @@
  */
 package org.jis.view;
 
+import java.awt.event.ActionEvent;
 import java.net.URL;
+import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
+
+import org.iMage.plugins.JmjrstPlugin;
+import org.iMage.plugins.PluginManager;
 
 import org.jis.Main;
 import org.jis.listner.MenuListner;
@@ -49,6 +56,8 @@ public class Menu extends JMenuBar {
   public JMenuItem          look_motif;
   public JMenuItem          look_gtk;
   public JMenuItem          update_check;
+  public JTextArea          noplugins;
+  
 
   /**
    * @param m
@@ -60,6 +69,8 @@ public class Menu extends JMenuBar {
     JMenu option = new JMenu(m.mes.getString("Menu.1"));
     JMenu optionen_look = new JMenu(m.mes.getString("Menu.2"));
     JMenu about = new JMenu(m.mes.getString("Menu.3"));
+    
+    JMenu datei_plugins = new JMenu("Load plug-in");
 
     gener = new JMenuItem(m.mes.getString("Menu.4"));
     URL url = ClassLoader.getSystemResource("icons/media-playback-start.png");
@@ -91,7 +102,7 @@ public class Menu extends JMenuBar {
     update_check = new JMenuItem(m.mes.getString("Menu.15"));
     url = ClassLoader.getSystemResource("icons/system-software-update.png");
     update_check.setIcon(new ImageIcon(url));
-
+    
     look_windows = new JMenuItem(m.mes.getString("Menu.8"));
     look_windows_classic = new JMenuItem(m.mes.getString("Menu.9"));
     look_nimbus = new JMenuItem(m.mes.getString("Menu.16"));
@@ -106,6 +117,8 @@ public class Menu extends JMenuBar {
     datei.add(gener);
     datei.add(zippen);
     datei.add(gallerie);
+    addPlugins(datei_plugins, m);
+    datei.add(datei_plugins);
     datei.addSeparator();
     datei.add(exit);
     option.add(optionen_look);
@@ -116,6 +129,7 @@ public class Menu extends JMenuBar {
     this.add(datei);
     this.add(option);
     this.add(about);
+    
 
     MenuListner al = new MenuListner(m, this);
     exit.addActionListener(al);
@@ -149,5 +163,53 @@ public class Menu extends JMenuBar {
           .equalsIgnoreCase("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")) optionen_look.add(look_nimbus); //$NON-NLS-1$
     }
   }
-
+  
+  /**
+   * Outsourced all logic for the plugin menu.
+   * @param swt The plugin JMenu object.
+   * @param m The JMJRST main-object.
+   */
+  private void addPlugins(JMenu swt, Main m) {
+      List<JmjrstPlugin> plugins = PluginManager.getPlugins();
+      
+      if (plugins.isEmpty()) {
+        //message '(No plug-ins available!)' get's produced
+          JMenuItem empty = new JMenuItem("(No plug-ins available!)");
+          empty.setEnabled(false);
+          swt.add(empty);
+          return;
+      }
+      
+      int i = 0;
+      for (JmjrstPlugin plugin : plugins) {
+          i++;
+          
+          final JmjrstPlugin pluginAction = plugin;
+          
+          plugin.init(m);
+          
+          // Add Startbutton for Plugin
+          JMenuItem pluginStart = new JMenuItem(new AbstractAction(plugin.getMenuText()) {
+              public void actionPerformed(ActionEvent e) {
+                  pluginAction.run();
+              }
+          });
+          swt.add(pluginStart);
+          
+          // Add config Button if needed
+          if (plugin.isConfigurable()) {
+              JMenuItem pluginConfig = new JMenuItem(new AbstractAction(plugin.getName() + " konfigurieren") {
+                  public void actionPerformed(ActionEvent e) {
+                      pluginAction.configure();
+                  }
+              });
+              swt.add(pluginConfig);
+          }
+          
+          // Add seperator
+          if (plugins.size() != i) {
+              swt.addSeparator();
+          }
+      }
+  }
 }
