@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -56,7 +57,6 @@ public class Menu extends JMenuBar {
   public JMenuItem          look_motif;
   public JMenuItem          look_gtk;
   public JMenuItem          update_check;
-  public JTextArea          noplugins;
   
 
   /**
@@ -196,7 +196,7 @@ public class Menu extends JMenuBar {
           });
           swt.add(pluginStart);
           
-          // Add config Button if needed
+          // Add config Button, if needed
           if (plugin.isConfigurable()) {
               JMenuItem pluginConfig = new JMenuItem(new AbstractAction(plugin.getName() + " konfigurieren") {
                   public void actionPerformed(ActionEvent e) {
