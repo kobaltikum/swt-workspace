@@ -10,13 +10,18 @@
 
 	<groupId>swt1.ub3.a1</groupId>
 	<artifactId>2069436</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
 	<name>jmjrst.main</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>swt1.ub3.a2</groupId>
+			<artifactId>2069436</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>

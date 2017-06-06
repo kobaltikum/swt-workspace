@@ -25,7 +25,7 @@
 		<module>iMage.geometrify</module>
 		<module>iMage.geometrify-cli</module>
 		<module>iMage.TestPlugIn</module>
-		
 		<module>iMage.prizm-plugin</module>
+		<module>iMage.bundle</module>
 	</modules>
 </project>
