@@ -3,7 +3,6 @@ package org.iMage.TestPlugIn;
 import org.iMage.plugins.JmjrstPlugin;
 import org.iMage.plugins.PluginPriority;
 import org.jis.Main;
-
 import org.kohsuke.MetaInfServices;
 
 /**

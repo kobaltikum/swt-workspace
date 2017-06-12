@@ -8,6 +8,6 @@ public class App
 {
     public static void main( String[] args )
     {
-      org.jis.Main.main(new String[0]);
+      org.jis.Main.main(args);
     }
 }

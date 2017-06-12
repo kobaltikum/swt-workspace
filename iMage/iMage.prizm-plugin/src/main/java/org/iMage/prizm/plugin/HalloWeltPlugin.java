@@ -22,12 +22,18 @@ public class HalloWeltPlugin extends JmjrstPlugin
     private org.jis.Main main;
     private PluginPriority priority;
 
-    @Override
+    /**
+     * Sets the priority of this plugin.
+     * @param priority The priority to be set.
+     */
     public void setPriority(PluginPriority priority) {
       this.priority = priority;
     }
 
-    @Override
+    /**
+     * Returns the priority of this plugin.
+     * @return The PluginPriority priority.
+     */
     public PluginPriority getPriority() {
       return this.priority;
     }
