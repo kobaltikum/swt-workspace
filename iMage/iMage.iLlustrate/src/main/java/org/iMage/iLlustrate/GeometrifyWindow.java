@@ -17,6 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
 
+import org.iMage.iLlustrate.listeners.IterationSliderListener;
+import org.iMage.iLlustrate.listeners.SampleSliderListener;
+
 /**
  * @author jakobdraeger
  *
@@ -52,8 +55,8 @@ public class GeometrifyWindow extends JFrame {
 
     this.picBeforeCont = new JLabel();
     this.picAfterCont = new JLabel();
-    this.itCount = new JLabel("(2000)");
-    this.sampCount = new JLabel("(200)");
+    this.itCount = new JLabel("(100)");
+    this.sampCount = new JLabel("(30)");
     
     this.iterationsSlider = new JSlider(0, 2000);
     this.sampleSlider = new JSlider(0, 200);
@@ -116,6 +119,8 @@ public class GeometrifyWindow extends JFrame {
     this.itCount.setBorder(new EmptyBorder(0, 0, 10, 0));
     this.itSlideCont.add(this.itCount, BorderLayout.CENTER);
     this.sliderCont.add(this.itSlideCont, BorderLayout.NORTH);
+    IterationSliderListener itSlider = new IterationSliderListener(this);
+    this.iterationsSlider.addChangeListener(itSlider);
 
     this.sampleSlider.setPreferredSize(new Dimension(250, 40));
     this.sampleSlider.setBorder(new EmptyBorder(5, 0, 0, 0));
@@ -126,6 +131,9 @@ public class GeometrifyWindow extends JFrame {
     this.sampCount.setBorder(new EmptyBorder(0, 5, 10, 0));
     this.sampSlideCont.add(this.sampCount, BorderLayout.CENTER);
     this.sliderCont.add(this.sampSlideCont, BorderLayout.SOUTH);
+    SampleSliderListener sampSlider = new SampleSliderListener(this);
+    this.sampleSlider.addChangeListener(sampSlider);
+    
     this.sliderCont.setBorder(new EmptyBorder(25, 25, 25, 25));
     this.mainPanel.add(sliderCont, BorderLayout.CENTER);
     
@@ -143,4 +151,19 @@ public class GeometrifyWindow extends JFrame {
     this.setResizable(false);
   }
 
-}
+  /**
+   * Set-Method for the iteration count next to the iterations slider.
+   * @param iterationCount The Integer to be displayed.
+   */
+  public void setItCount(int iterationCount) {
+    this.itCount.setText("(" + iterationCount + ")");
+  }
+  
+  /**
+   * Set-Method for the sample count next to the samples slider.
+   * @param sampleCount The Integer to be displayed.
+   */
+  public void setSampleCount(int sampleCount) {
+    this.sampCount.setText("(" + sampleCount + ")");
+  }
+ }
