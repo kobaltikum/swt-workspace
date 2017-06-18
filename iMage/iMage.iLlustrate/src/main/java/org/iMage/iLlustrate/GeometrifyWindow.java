@@ -7,8 +7,14 @@ package org.iMage.iLlustrate;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Hashtable;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
 
+import org.iMage.geometrify.RandomPointGenerator;
+import org.iMage.geometrify.TrianglePictureFilter;
 import org.iMage.iLlustrate.listeners.IterationSliderListener;
+import org.iMage.iLlustrate.listeners.LoadButtonListener;
 import org.iMage.iLlustrate.listeners.SampleSliderListener;
 
 /**
@@ -44,6 +53,9 @@ public class GeometrifyWindow extends JFrame {
   private JSlider sampleSlider;
   private JButton loadButton;
   private JButton runButton;
+  
+  private BufferedImage originalImage;
+  private BufferedImage previewImage;
 
   public GeometrifyWindow() {
     this.mainPanel = new JPanel();
@@ -63,6 +75,12 @@ public class GeometrifyWindow extends JFrame {
     this.loadButton = new JButton("Load");
     this.runButton = new JButton("Run");
     
+    try {
+      this.originalImage = ImageIO.read(getClass().getResource("/example.png"));
+    }
+    catch(IOException e) {
+      e.printStackTrace();
+    }
     this.initWindow();
     this.setTitle("iLlustrate");
   }
@@ -72,7 +90,8 @@ public class GeometrifyWindow extends JFrame {
    */
   private void initWindow() {
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    //initializing layouts
+    
+    //---  initializing layouts  ---
     this.mainPanel.setLayout(new BorderLayout());
     this.picturesCont.setLayout(new BorderLayout());
     this.picBeforeCont.setLayout(new BorderLayout());
@@ -81,15 +100,17 @@ public class GeometrifyWindow extends JFrame {
     this.itSlideCont.setLayout(new BorderLayout());
     this.sampSlideCont.setLayout(new BorderLayout());
     this.menuCont.setLayout(new FlowLayout());
-    //--TEST--
-    ImageIcon testimage1 = new ImageIcon(getClass().getResource("/swt1test1.png"));
-    ImageIcon testimage2 = new ImageIcon(getClass().getResource("/swt1test2.png"));
-    //--    --
-    this.picBeforeCont.setIcon(testimage1);
+    
+    //---  initializing example pictures  ---
+    BufferedImage scaledImage = this.scaleImage(originalImage);
+    ImageIcon originalImageIcon = new ImageIcon(scaledImage);
+    ImageIcon previewImageIcon = new ImageIcon(this.applyFilter(scaledImage, 100, 30));
+    
+    this.picBeforeCont.setIcon(originalImageIcon);
     this.picBeforeCont.setBorder(new EmptyBorder(30, 30, 30, 30));
     this.picBeforeCont.setVisible(true);
     
-    this.picAfterCont.setIcon(testimage2);
+    this.picAfterCont.setIcon(previewImageIcon);
     this.picAfterCont.setBorder(new EmptyBorder(30, 30, 30, 30));
     this.picAfterCont.setVisible(true);
     
@@ -97,6 +118,7 @@ public class GeometrifyWindow extends JFrame {
     this.picturesCont.add(this.picAfterCont, BorderLayout.EAST);
     this.mainPanel.add(this.picturesCont, BorderLayout.NORTH);
     
+    //---  initializing JSliders  ---
     Hashtable lableTableIT = new Hashtable();
     lableTableIT.put(new Integer(0), new JLabel("0"));
     lableTableIT.put(new Integer(2000), new JLabel("2000"));
@@ -137,7 +159,9 @@ public class GeometrifyWindow extends JFrame {
     this.sliderCont.setBorder(new EmptyBorder(25, 25, 25, 25));
     this.mainPanel.add(sliderCont, BorderLayout.CENTER);
     
+    //---  initializing JButtons  ---
     this.menuCont.add(this.loadButton);
+    this.loadButton.addActionListener(new LoadButtonListener(this));
     this.menuCont.add(this.runButton);
     this.loadButton.setEnabled(true);
     this.runButton.setEnabled(true);
@@ -166,4 +190,33 @@ public class GeometrifyWindow extends JFrame {
   public void setSampleCount(int sampleCount) {
     this.sampCount.setText("(" + sampleCount + ")");
   }
- }
+  
+  /**
+   * Helping method to scale a BufferedImage to a 150 by 150 image.
+   * @param imageToScale The BufferedImage to be scaled.
+   * @return The scaled BufferedImage.
+   */
+  private BufferedImage scaleImage(BufferedImage imageToScale) {
+    BufferedImage scaledImage = null;
+    if (imageToScale != null) {
+        scaledImage = new BufferedImage(150, 150, imageToScale.getType());
+        Graphics2D graphics2D = scaledImage.createGraphics();
+        graphics2D.drawImage(imageToScale, 0, 0, 150, 150, null);
+        graphics2D.dispose();
+    }
+    return scaledImage;
+}
+ 
+  /**
+   * Helping method to apply the Geometrify-Filter on 
+   * @param image The image to be processed.
+   * @param numberOfIterations The number of iterations to go through (needed the TrianglePictureFilter#apply).
+   * @param numberOfSamples The number of samples to generate per iteration (needed the TrianglePictureFilter#apply).
+   * @return The filtered BufferedImage.
+   */
+  private BufferedImage applyFilter(BufferedImage image, int numberOfIterations, int numberOfSamples) {
+    RandomPointGenerator generator = new RandomPointGenerator(image.getWidth(), image.getHeight());
+    TrianglePictureFilter filter = new TrianglePictureFilter(generator);
+    return filter.apply(image, numberOfIterations, numberOfSamples);
+  }
+}
