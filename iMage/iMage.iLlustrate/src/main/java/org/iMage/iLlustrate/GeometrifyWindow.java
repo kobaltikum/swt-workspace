@@ -164,8 +164,10 @@ public class GeometrifyWindow extends JFrame {
     //---  initializing JButtons  ---
     this.menuCont.add(this.loadButton);
     this.loadButton.addActionListener(new LoadButtonListener(this));
+    this.loadButton.setToolTipText("Load a .png image from your system. The preview will update.");
     this.menuCont.add(this.runButton);
     this.runButton.addActionListener(new RunButtonListener(this));
+    this.runButton.setToolTipText("Apply the filter 'Geometrify' to the loaded image.");
     this.loadButton.setEnabled(true);
     this.runButton.setEnabled(true);
     this.mainPanel.add(this.menuCont, BorderLayout.SOUTH);

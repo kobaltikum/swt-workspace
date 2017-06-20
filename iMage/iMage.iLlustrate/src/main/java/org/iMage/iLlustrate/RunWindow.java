@@ -16,7 +16,7 @@ public class RunWindow extends JFrame {
   
   private static final long serialVersionUID = 1418611951272454118L;
   
-  private GeometrifyWindow window;
+  
   private BufferedImage image;
   private JPanel optionsMenu;
   private JButton saveButton;
@@ -25,7 +25,6 @@ public class RunWindow extends JFrame {
   private JLabel picture;
   
   public RunWindow(GeometrifyWindow window) {
-    this.window = window;
     
     this.image = window.getImage();
     this.image = App.applyFilter(this.image, window.getItCount(), window.getSamplesCount());
@@ -40,6 +39,7 @@ public class RunWindow extends JFrame {
     this.optionsMenu.add(this.updateBox, BorderLayout.WEST);
     this.saveButton = new JButton("Save");
     this.saveButton.addActionListener(new SaveButtonListener(this));
+    this.saveButton.setToolTipText("Save the shown image to a chosen location.");
     this.optionsMenu.add(this.saveButton, BorderLayout.EAST);
     this.updatesLabel = new JLabel("Continuous Updates");
     this.optionsMenu.add(this.updatesLabel, BorderLayout.CENTER);
@@ -57,7 +57,7 @@ public class RunWindow extends JFrame {
     //this.displayImage();
   }
 
-  private void displayImage() {
+  /*private void displayImage() {
     boolean contUpdates = true;
     if (contUpdates) {
       BufferedImage tempImage = this.image;
@@ -69,7 +69,7 @@ public class RunWindow extends JFrame {
         this.setVisible(true);
       }
     }
-  }
+  }*/
 
   /**
    * Get-Method to return the processed picture.

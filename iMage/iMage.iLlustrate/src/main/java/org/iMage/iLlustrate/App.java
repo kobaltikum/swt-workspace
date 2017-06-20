@@ -8,10 +8,8 @@ import org.iMage.geometrify.TrianglePictureFilter;
 
 public class App {
   
-  private static GeometrifyWindow window;
-
   public static void main(String[] args) {
-    window = new GeometrifyWindow();
+    new GeometrifyWindow();
   }
   
   /** Helping method to scale a BufferedImage to a 150 by 150 image.
