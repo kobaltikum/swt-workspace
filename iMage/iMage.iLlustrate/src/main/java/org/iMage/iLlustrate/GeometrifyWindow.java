@@ -27,6 +27,7 @@ import org.iMage.geometrify.RandomPointGenerator;
 import org.iMage.geometrify.TrianglePictureFilter;
 import org.iMage.iLlustrate.listeners.IterationSliderListener;
 import org.iMage.iLlustrate.listeners.LoadButtonListener;
+import org.iMage.iLlustrate.listeners.RunButtonListener;
 import org.iMage.iLlustrate.listeners.SampleSliderListener;
 
 /**
@@ -55,7 +56,8 @@ public class GeometrifyWindow extends JFrame {
   private JButton runButton;
   
   private BufferedImage originalImage;
-  private BufferedImage previewImage;
+  private ImageIcon originalImageIcon;
+  private ImageIcon previewImageIcon;
 
   public GeometrifyWindow() {
     this.mainPanel = new JPanel();
@@ -102,15 +104,15 @@ public class GeometrifyWindow extends JFrame {
     this.menuCont.setLayout(new FlowLayout());
     
     //---  initializing example pictures  ---
-    BufferedImage scaledImage = this.scaleImage(originalImage);
-    ImageIcon originalImageIcon = new ImageIcon(scaledImage);
-    ImageIcon previewImageIcon = new ImageIcon(this.applyFilter(scaledImage, 100, 30));
+    BufferedImage scaledImage = App.scaleImage(originalImage);
+    this.originalImageIcon = new ImageIcon(scaledImage);
+    this.previewImageIcon = new ImageIcon(App.applyFilter(scaledImage, 100, 30));
     
-    this.picBeforeCont.setIcon(originalImageIcon);
+    this.picBeforeCont.setIcon(this.originalImageIcon);
     this.picBeforeCont.setBorder(new EmptyBorder(30, 30, 30, 30));
     this.picBeforeCont.setVisible(true);
     
-    this.picAfterCont.setIcon(previewImageIcon);
+    this.picAfterCont.setIcon(this.previewImageIcon);
     this.picAfterCont.setBorder(new EmptyBorder(30, 30, 30, 30));
     this.picAfterCont.setVisible(true);
     
@@ -163,6 +165,7 @@ public class GeometrifyWindow extends JFrame {
     this.menuCont.add(this.loadButton);
     this.loadButton.addActionListener(new LoadButtonListener(this));
     this.menuCont.add(this.runButton);
+    this.runButton.addActionListener(new RunButtonListener(this));
     this.loadButton.setEnabled(true);
     this.runButton.setEnabled(true);
     this.mainPanel.add(this.menuCont, BorderLayout.SOUTH);
@@ -192,31 +195,68 @@ public class GeometrifyWindow extends JFrame {
   }
   
   /**
-   * Helping method to scale a BufferedImage to a 150 by 150 image.
-   * @param imageToScale The BufferedImage to be scaled.
-   * @return The scaled BufferedImage.
+   * Sets the preview images.
+   * @param previewImage The image, on which the filter should be applied for previewing purposes.
    */
-  private BufferedImage scaleImage(BufferedImage imageToScale) {
-    BufferedImage scaledImage = null;
-    if (imageToScale != null) {
-        scaledImage = new BufferedImage(150, 150, imageToScale.getType());
-        Graphics2D graphics2D = scaledImage.createGraphics();
-        graphics2D.drawImage(imageToScale, 0, 0, 150, 150, null);
-        graphics2D.dispose();
-    }
-    return scaledImage;
-}
- 
+  public void setPreview(BufferedImage previewImage) {
+    BufferedImage scaledImage = App.scaleImage(previewImage);
+    this.originalImageIcon = new ImageIcon(scaledImage);
+    this.picBeforeCont.setIcon(this.originalImageIcon);
+    this.previewImageIcon = new ImageIcon(App.applyFilter(scaledImage, 100, 30));
+    this.picAfterCont.setIcon(this.previewImageIcon);
+  }
+  
   /**
-   * Helping method to apply the Geometrify-Filter on 
-   * @param image The image to be processed.
-   * @param numberOfIterations The number of iterations to go through (needed the TrianglePictureFilter#apply).
-   * @param numberOfSamples The number of samples to generate per iteration (needed the TrianglePictureFilter#apply).
-   * @return The filtered BufferedImage.
+   * Puts together and returns a String containing the image name,
+   * the current iteration count and the current sample count.
+   * @return The String containing the information.
    */
-  private BufferedImage applyFilter(BufferedImage image, int numberOfIterations, int numberOfSamples) {
-    RandomPointGenerator generator = new RandomPointGenerator(image.getWidth(), image.getHeight());
-    TrianglePictureFilter filter = new TrianglePictureFilter(generator);
-    return filter.apply(image, numberOfIterations, numberOfSamples);
+  public String getImageTitle() {
+    String iterations = this.itCount.getText().substring(1, this.itCount.getText().length() - 1);
+    String samples = this.sampCount.getText().substring(1, this.sampCount.getText().length() - 1);
+    return "example.png (" + iterations + " iterations, " + samples + " samples)";
+  }
+
+  /**
+   * Get-Method for the original image.
+   * @return The BufferedImage originalImage.
+   */
+  public BufferedImage getImage() {
+    return this.originalImage;
+  }
+
+  /**
+   * Get-Method to return the current iteration count, set by the iteration slider.
+   * @return The Integer iteration count.
+   */
+  public int getItCount() {
+    try {
+      return Integer.parseInt(this.itCount.getText().substring(1, this.itCount.getText().length() - 1));
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
+  
+  /**
+   * Get-Method to return the current samples count, set by the sample slider.
+   * @return The Integer samples count.
+   */
+  public int getSamplesCount() {
+    try {
+      return Integer.parseInt(this.sampCount.getText().substring(1, this.sampCount.getText().length() - 1));
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
+
+  /**
+   * Set-Method to set the image, that would be processed, when the run button
+   * is pressed.
+   * @param image The BufferedImage to be processed by the filter.
+   */
+  public void setImage(BufferedImage image) {
+    this.originalImage = image;
   }
 }
