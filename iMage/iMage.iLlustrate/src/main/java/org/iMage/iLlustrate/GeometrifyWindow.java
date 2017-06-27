@@ -7,10 +7,7 @@ package org.iMage.iLlustrate;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -23,8 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
 
-import org.iMage.geometrify.RandomPointGenerator;
-import org.iMage.geometrify.TrianglePictureFilter;
 import org.iMage.iLlustrate.listeners.IterationSliderListener;
 import org.iMage.iLlustrate.listeners.LoadButtonListener;
 import org.iMage.iLlustrate.listeners.RunButtonListener;
@@ -90,6 +85,7 @@ public class GeometrifyWindow extends JFrame {
   /**
    * Initializes all components and properties of the window.
    */
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   private void initWindow() {
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     
